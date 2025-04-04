@@ -1,4 +1,4 @@
-# Joint EarthCARE Analysis (hk25-ec1)
+# Joint EarthCARE analysis (hk25-ec1)
 
 [EarthCARE](https://earth.esa.int/eogateway/missions/earthcare) is a satellite, developed by ESA, JAXA and NICT and is the sixth satellite choosen as part of ESA's Earth Explorer Programme.   It was launched on 28 May 2024, and be completing its first year in orbit at the time of the Hackathon.  It has unusual capabilities for measuring clouds, aerosols, and radiation.
 
