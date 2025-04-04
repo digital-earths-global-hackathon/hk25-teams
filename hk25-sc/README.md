@@ -1,4 +1,4 @@
-### Mesoscale structure of stratocumulus clouds (hk25-sc)
+# Mesoscale structure of stratocumulus clouds (hk25-sc)
 
 Low-level clouds over subtropical oceans are important for the energy balance of the planet and climate sensitivity. Their properties and evolution crucially depend on small scale processes. A recent examination of their climatology ([Nowak et al. 2025](https://doi.org/10.1029/2024MS004340)) in two [NextGEMS](https://nextgems-h2020.eu/) global storm-resolving models indicated realistic covariability of stratocumulus and related environmental factors, and the vertical structure of the boundary layer. How is that possible without elaborated model tuning and on the grid which is too large to resolve large turbulent eddies? 
 
