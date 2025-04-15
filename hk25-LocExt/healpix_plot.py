@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+(c) 2025 under a MIT License (https://mit-license.org)
+
+Authors:
+- Lukas Brunner || lukas.brunner@uni-hamburg.de
+
+"""
+
 import numpy as np
 import xarray as xr
 import healpy as hp
