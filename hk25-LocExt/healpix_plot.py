@@ -126,7 +126,7 @@ def hp_plot(
     levels=None,
     extend='neither',
     add_gridlines=False,
-    dpi=300, 
+    dpi=72, 
     proj_kwargs={},
     cbar_kwargs={}, 
     rivers_lakes_kwargs={},
