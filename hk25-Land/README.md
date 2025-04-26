@@ -12,3 +12,4 @@ Sketch of initial activities:
 + Quantify soil moisture-precipitation feedback across different regions
 + Analyze where and how spatial variability is introduced in km-scale models compared to coarser-resolution models
 
+
