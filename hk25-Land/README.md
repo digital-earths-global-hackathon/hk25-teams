@@ -13,3 +13,4 @@ Sketch of initial activities:
 + Analyze where and how spatial variability is introduced in km-scale models compared to coarser-resolution models
 
 
+Temporary change to force GitHub diff detection.
