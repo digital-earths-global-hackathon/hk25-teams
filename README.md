@@ -2,6 +2,7 @@
 
 This repository collects the work of different science teams  and cross-cutting activities during the global hackathon. It serves as a collaboration platform and provides information about for participants.
 
+In the [./hk25-tutorials](https://github.com/digital-earths-global-hackathon/hk25-teams/blob/main/hk25-tutorials) you will find some simple **tutorials** to get familiar with the data.
 
 ## Contribute with your own idea
 
