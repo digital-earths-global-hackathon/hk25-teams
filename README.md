@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Science, Tutorials and Cross-cutting Activities
 
 This repository collects the work of different science teams  and cross-cutting activities during the global hackathon. It serves as a collaboration platform and provides information about for participants.
