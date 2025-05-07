@@ -7,6 +7,6 @@ In this group, we will examine high cloud top temperatures in storm resolving mo
 **Coordination:** Paulina Czarnecki (pc2943@columbia.edu)
 
 **Sketch of Initial Activities**
-- Identify high cloud top temperatures in X-SHiELD (in the simplest case, by inverting $\sigma T^4 = OLR_{allsky}$ in gridcells where cloud area fraction $f = 1$ and ice content $> 10^{-1}$ kg m<sup>2</sup>)
+- Identify high cloud top temperatures (in the simplest case, by inverting $\sigma T^4 = OLR_{allsky}$ in gridcells where cloud area fraction $f = 1$ and ice content $> 10^{-1}$ kg m<sup>2</sup>)
 - Plot and analyze distributions in space and time 
-- Compare to other models, observations, +4K simulations.
+- Compare between models, observations, +4K simulations.
