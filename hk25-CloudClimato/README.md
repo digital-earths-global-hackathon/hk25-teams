@@ -1,9 +1,9 @@
-Intercomparison : how realistic are GSRM clouds ? (hk25-CloudClimato) 
+# Intercomparison: How realistic are GSRM clouds? (hk25-CloudClimato)
 
 
 This science team will compare GSRM cloud characteristics with diverse climatological observations (in situ, satellite, etc.) in order to assess the realism of different cloud types in the control climate of various models and identify potential mean state biases. The goal is to publish these analyses in an overview paper that can be used as a a reference for process papers dedicated to more specific analyses of shallow clouds, deep clouds, storm tracks, polar clouds, etc. The hackathon will be used as a kickstarter for this project and hopefully the collaboration will continue afterwards to try and submit the paper rapidly. 
 
-Coordination : Emilie Fons (emilie.fons@lmd.ipsl.fr)
+**Coordination**: Emilie Fons (emilie.fons@lmd.ipsl.fr)
 
 Sketch of initial activities: 
 - standardize cloud characteristics that are available in all GSR models. Which models have outputs from a satellite simulator ? 

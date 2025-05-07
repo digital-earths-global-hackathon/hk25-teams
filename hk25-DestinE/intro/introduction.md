@@ -7,6 +7,7 @@
 - [Are there example notebooks for my interactive analysis? -> Polytope examples](https://github.com/destination-earth-digital-twins/polytope-examples/tree/main/climate-dt)
 - [How do I adjust my data request? -> STAC catalogue](https://climate-catalogue.lumi.apps.dte.destination-earth.eu/?root=root)
 - [Is there documentation on Earthkit? -> Earthkit docs](https://earthkit.readthedocs.io/en/latest/)
+- [Can I see the status of the different data bridges somewhere? -> status.data.destination-earth.eu](https://status.data.destination-earth.eu/LUMI)
 
 ## Accessing DestinE data
 ### Option 1: Interactive data analysis on the Destination Earth Service Platform (DESP)
