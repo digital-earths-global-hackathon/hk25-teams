@@ -8,6 +8,6 @@ Many atmospheric phenomena, especially in the tropics, are scale-coupled. Small-
 * Understand the transfer of energy near the grid-scale of these km-scale simulations
 * Examine values of the same $\mathcal{D}_\ell$ at different HEALPix levels to ensure energy conservation away from filter scale
 
-**Note:** As a cross-cutting team we welcome collaboration with other science teams where there is interest in understanding inter-scale energy transfers in atmospheric phenomena. The upscale impact of small-scale convection and mesoscale organised convection on tropical phenomena is of particular interest.
+**Note:** As a cross-cutting team we welcome collaboration with other science teams where there is interest in understanding inter-scale energy transfers in atmospheric phenomena. The upscale impact of small-scale convection and mesoscale organised convection on tropical atmospheric phenomena is of particular interest.
 
 **Coordination**: Dan Shipley (daniel.shipley@reading.ac.uk), Elliot McKinnon-Gray (e.b.mckinnon-gray@pgr.reading.ac.uk)
