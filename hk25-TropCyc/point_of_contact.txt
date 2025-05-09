@@ -1,0 +1,14 @@
+Please list below your node and the point of contact for the TC science team, along with your Mattermost handle.
+
+UK-Oxford Node: Stella Bourdin (@stella.bourdin) & Alex Baker (@bakera)
+Japan Node: Xu Chen (@xu_chen)
+Roma (ESA) Node: Arthur Avenas (@TBD)
+Australia Node: ?
+Brazil Node: ? 
+Argentina Node: ?
+China Node: ?
+Germany Node: ? 
+US-Central Node: ?
+US-East Node: ?
+US-West Node: ? 
+

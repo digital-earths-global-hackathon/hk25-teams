@@ -1,4 +1,4 @@
-# Generic DGGS Format Specification (`hk25-EOPF_DGGS`)
+# Generic DGGS Format Specification (hk25-EOPF_DGGS)
 
 We aim to make the **HEALPix coordinate system** more accessible and user-friendly, enabling scientists and engineers to seamlessly work with diverse geospatial datasets (in-situ, Satelite, model output). Our efforts focus on simplifying manipulation and analysis workflows for **Discrete Global Grid Systems (DGGS)**, particularly HEALPix-based data, with a strong emphasis on interoperability and scalability.
 

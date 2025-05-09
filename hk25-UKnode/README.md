@@ -1,6 +1,6 @@
 # UK Node (hk25-UKnode)
 
-This directory contains code which is related to the UK Node. There are notebooks in the `online` and `JASMIN` directories -- these demonstrate how to access the UK Node data, from anywhere and on JASMIN respectively.
+This directory contains information related to the UK Node. `science_groups` has information abut each UK group, including contact information. There are notebooks in the `online` and `JASMIN` directories -- these demonstrate how to access the UK Node data, from anywhere and on JASMIN respectively.
 
 ## Contacts: 
 
