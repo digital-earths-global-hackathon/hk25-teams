@@ -134,7 +134,7 @@ def _init_trigger_area_idxs_array(
         parameters.
     """    
     cells = np.arange(
-        0, np.array([l.shape[0] for l in trigger_area_idxs]).max()
+        0, np.array([x.shape[0] for x in trigger_area_idxs]).max()
         )
 
     trigger_area_idxs_array = xr.DataArray(
@@ -185,7 +185,7 @@ def remove_land_triggers(
             )
         )
     mcs_trigger_locs_ocean = mcs_trigger_locs.where(
-        mcs_trigger_locs['is_trigger_area_all_ocean'] == True, drop=True
+        mcs_trigger_locs['is_trigger_area_all_ocean'], drop=True
         )
     mcs_trigger_locs_ocean = mcs_trigger_locs_ocean.drop(
         'is_trigger_area_all_ocean'
@@ -353,7 +353,8 @@ def _get_var_in_trigger_area_multiple(
         mcs_start_basetime = mcs_trigger_locs.sel(tracks=track)\
             ['start_basetime'].values
         pre_mcs_start_basetime = mcs_start_basetime - times_before_trigger
-        if pre_mcs_start_basetime < analysis_time[0]: continue
+        if pre_mcs_start_basetime < analysis_time[0]: 
+            continue
         var_before_trigger = data_field.sel(
             time=slice(pre_mcs_start_basetime, mcs_start_basetime),
         )
@@ -548,10 +549,10 @@ def _check_time_before_trigger_validity(
     sample_frequency = _get_sample_frequency(data_field)
     if (times_before_trigger % sample_frequency) != 0:
         raise ValueError(
-            f"Please provide a 'times_before_trigger' that is a multiple of " +
-            f"the sampling frequency of the data field. The sampling " +
+            "Please provide a 'times_before_trigger' that is a multiple of " +
+            "the sampling frequency of the data field. The sampling " +
             f"frequency is {(sample_frequency / np.timedelta64(1, 'h'))[0]} " +
-            f"hours.")
+            "hours.")
     
 
 def _select_trigger_area_idxs(
