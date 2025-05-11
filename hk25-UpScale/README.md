@@ -1,4 +1,4 @@
-# Inter-Scale Energy Transfers in the Atmosphere (hk25-InterScale)
+# Up-Scale Energy Transfers in the Atmosphere (hk25-UpScale)
 
 Many atmospheric phenomena, especially in the tropics, are scale-coupled. Small-scale convection (scales much less than 100 km) tends to aggregate into meso-scales (100-500 km), and both of these smaller-scale processes feed upscale onto much larger phenomena - e.g. MCSs, Tropical Cyclones, Equatorial Waves and the MJO. The reverse is also true through downscale energy transer, and is more well convered in the literature. This team aims to explore the inter-scale energetics of the atmosphere using the [LoSSETT](https://github.com/ElliotMG/LoSSETT) tool to extract the $\mathcal{D}_\ell$ term (see LoSSETT README), and make progress toward the following with similarly interested collaborators:
 
