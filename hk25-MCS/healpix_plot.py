@@ -9,8 +9,6 @@ Authors:
 """
 
 import numpy as np
-import xarray as xr
-import healpy as hp
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
