@@ -28,7 +28,7 @@ MCS_TRACK_FILES = {
 
 CATALOG = "https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml"
 LOCATION = "EU"  # Other possibility: 'online', but 'EU' ensures local download
-PRODUCT = "icon_ngc4008"
+PRODUCT = "icon_d3hp003"
 
 ZOOM = 9
 TIME = "PT3H"
@@ -150,7 +150,7 @@ mcs_trigger_locs_ocean = mcs_utils.remove_land_triggers(mcs_trigger_locs, ocean_
 # %%
 vars = ["prw"]
 data_sample = data_field[vars].compute()
-time_before_trigger = np.timedelta64(24, "h")
+time_before_trigger = np.timedelta64(24*3, "h")
 var_in_trigger_area = {
     var: mcs_utils.get_var_in_trigger_area(
         mcs_trigger_locs_ocean,
@@ -172,7 +172,7 @@ for var in vars:
         var_in_trigger_area[var].mean(dim=["tracks", "cell"]).transpose(),
     )
     plt.xlabel("radius around trigger location / degree")
-    plt.ylabel("timesteps before triggering / 3h")
+    plt.ylabel("timesteps before triggering / h")
     plt.colorbar(label="prw / mm")
     plt.title(f"Spatiotemporal variability of {var} before MCS triggering")
 
@@ -202,3 +202,5 @@ plt.title(f"Spatial variability of {var} at last saved timestep before MCS trigg
 plt.xlim([0.1, 1.5])
 plt.gca().spines["top"].set_visible(False)
 plt.gca().spines["right"].set_visible(False)
+
+# %%
