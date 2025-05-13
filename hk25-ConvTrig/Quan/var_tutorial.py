@@ -63,8 +63,12 @@ data_field = data_field.where(
 hp_grid = data_field[["lat", "lon"]].compute()
 
 # Get land-sea-mask
-ofs = data_field["ocean_fraction_surface"]
-ocean_mask = ofs.where(ofs == 1).compute()
+# Get land-sea-mask
+ofs = data_field["sftlf"]
+land_mask = ofs.where(ofs >0).compute()
+
+ocean_mask = np.isnan(land_mask)
+ocean_mask = ocean_mask.where(ocean_mask == 1)
 
 # %% [markdown]
 # ### Read in and subsample MCS tracking data
