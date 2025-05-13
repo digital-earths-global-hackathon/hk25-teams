@@ -48,7 +48,7 @@ RADII = np.arange(1.5, 0.0, -0.1)  # Radius around trigger location in degrees
 # Read in simulation data for analysis
 cat = intake.open_catalog(CATALOG)[LOCATION]
 simu_data = (
-    cat[PRODUCT](zoom=ZOOM, time=TIME, chunks="auto").to_dask().pipe(egh.attach_coords)
+    cat[PRODUCT](zoom=ZOOM, time=TIME, time_method = 'inst', chunks="auto").to_dask().pipe(egh.attach_coords)
 )
 
 # Subsample simulation data to relevant time frame
