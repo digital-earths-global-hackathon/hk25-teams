@@ -70,9 +70,9 @@ When using conda the approach is very similar to what is described in the [how t
 
 These are the main steps: 
 1. Create a directory, e.g. `destine_env` in the `work` of the project.
-2. Change into the `destine_env` directory and copy/move the [environment.yml](https://github.com/destination-earth-digital-twins/polytope-examples/blob/main/environment.yml) there.
-3. Create the environment (this may take a while) by running `conda env create -f environment.yaml -p <path-to-your-environment-folder>`
-4. Activate the environment `conda activate <path-to-your-environment-folder`
+2. Change into the `destine_env` directory and copy/move the [environment.yml](https://github.com/destination-earth-digital-twins/polytope-examples/blob/main/environment.yml) there `wget https://raw.githubusercontent.com/destination-earth-digital-twins/polytope-examples/refs/heads/main/environment.yml`.
+3. Create the environment (this may take a while) by running `mamba env create -f environment.yml -p <path-to-your-environment-folder>`
+4. Activate the environment `mamba activate <path-to-your-environment-folder`
 5. Create a jupyter kernel if you want to use jupyter notebooks by running `python3 -m ipykernel install --name global-hackathon-destine --user`
 
    
