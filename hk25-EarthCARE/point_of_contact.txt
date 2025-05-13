@@ -1,0 +1,4 @@
+Please list below your science team and the point of contact(s) on both sides, along with your Mattermost handle. 
+
+hk25-Curtains: Romain Fievet, HH-node (@romain.fievet) & Saskia Brose, ESA (@saskia.brose)
+hk25-TropCyc: Stella Bourdin, UK-node (@stella.bourdin) & Arthur Avenas, ESA (@aavenas)

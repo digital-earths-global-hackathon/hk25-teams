@@ -40,8 +40,13 @@ Organizers:
 
 ## Data Access
 
-- Data can be downloaded from this [Globus link](https://app.globus.org/file-manager?origin_id=41bda5dc-c193-43e8-a922-0fe4f94490e7&origin_path=%2F).
-- Period: 2019 to 2021
+- NERSC: Data can be downloaded from this [Globus link](https://app.globus.org/file-manager?origin_id=41bda5dc-c193-43e8-a922-0fe4f94490e7&origin_path=%2F).
+    - Period: 2019 to 2021
+- Unified Model: Data can be downloaded from the object store (see URL and how to access below) or accessed directly from a notebook (see the [UM demo notebook](https://github.com/digital-earths-global-hackathon/hk25-teams/blob/main/hk25-MCS/demo_UM_mcs_track_stats_healpix.ipynb) for details).
+    - Period: 2020-02-01 to 2021-02-28 
+    - Currently there is only one tracked simulation with the sim ID: um_glm_n2560_RAL3p3
+    - The URL of the data is https<nolink>://hackathon-o.s3-ext.jc.rl.ac.uk/sim-data/analysis/PyFLEXTRKR/um_glm_n2560_RAL3p3
+    - Those who wish to download the data can do so by using rclone (as described [here](https://github.com/digital-earths-global-hackathon/tools/blob/main/dataset_transfer/UK_s3_rclone.md), replace the URL in the example by the one above)
 
 ### Observations
 
@@ -52,7 +57,9 @@ Organizers:
 ### Simulations
 
 - SCREAM ([Data Description](https://github.com/digital-earths-global-hackathon/hk25/blob/main/content/models/scream.md))
-- Period: 2019-08-01 to 2020-08-31
+    - Period: 2019-08-01 to 2020-08-31
+- Unified Model ([Data Description](https://github.com/digital-earths-global-hackathon/hk25/blob/main/content/models/um.md))
+    - Period: 2020-01-20 to 2021-02-28
 
 ## MCS Tracking Protocol
 
