@@ -6,7 +6,14 @@ In this team we want to compare the simulated surface meteorology over Greenland
 
 **Coordination**: Hauke Schmidt (hauke.schmidt@mpimet.mpg.de)
 
-#### Sketch of initial activities:
-*	extract model output for the Greenland and Antarctic ice sheets
-*	produce precipitation and temperature maps
-*	compare annual cycles for regional means and selected locations
+### starting exercises: 
+
+- plot annual mean precipitation and temperature over Greenland broken down into solid and fluid for the different models (and Reanalysis);
+- integrated precipitation over Greenland (Antarctica) from models and reanalysis
+- Identify moist / warm air intrusions into the Arctic => feature tracking requires data stored as netcdf, there is an algorithm available.
+- surface energy balance
+- Satellite observations? precipitation products do not work > 60°, see paper provided by Hauke
+
+### useful links: 
+
+- sumup dataset: [observational precipiation data from Greenland](https://arcticdata.io/catalog/view/doi%3A10.18739%2FA2M61BR5M) 
