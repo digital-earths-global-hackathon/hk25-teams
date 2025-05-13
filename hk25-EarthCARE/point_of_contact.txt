@@ -2,3 +2,4 @@ Please list below your science team and the point of contact(s) on both sides, a
 
 hk25-Curtains: Romain Fievet, HH-node (@romain.fievet) & Saskia Brose, ESA (@saskia.brose)
 hk25-TropCyc: Stella Bourdin, UK-node (@stella.bourdin) & Arthur Avenas, ESA (@aavenas)
+hk25-StCu: Jakub Nowak, HH-node (@jakubnowak) & Johanna Mayer, ESA (@johanna.mayer)

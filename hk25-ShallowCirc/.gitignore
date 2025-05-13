@@ -1,0 +1,15 @@
+# Byte-compiled / cache
+__pycache__/
+
+# Jupyter & VS Code
+.ipynb_checkpoints/
+.vscode/
+*.code-workspace
+
+# Data
+*.csv
+*.tmp
+*.log
+
+# OS files
+.DS_Store

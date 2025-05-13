@@ -15,7 +15,7 @@ $$\Gamma =  \frac{\nabla.\langle \overrightarrow{V}h \rangle}{\nabla.\langle \ov
 
 where $\langle \rangle$ indicates vertical integration, $\overrightarrow{V}$ is the wind vector, $h$ is the moist static energy, $q$ is specific humidity, and $\nabla$ is the gradient. The vertical component of $\Gamma$ ($\Gamma_\mathrm{v}$) gives the ratio between the vertical advection of energy in the column and the import of moisture into the column:
 
-$$\Gamma_\mathrm{v} =  \frac{\nabla.\langle \omega \frac{\mathrm{d}h}{\mathrm{d}p} \rangle}{\nabla.\langle \overrightarrow{V}q \rangle}$$
+$$\Gamma_\mathrm{v} =  \frac{\langle \omega \frac{\mathrm{d}h}{\mathrm{d}p} \rangle}{\nabla.\langle \overrightarrow{V}q \rangle}$$
 
 where $\omega$ is upward motion and $\frac{\mathrm{d}h}{\mathrm{d}p}$ is the vertical gradient of moist static energy. 
 
