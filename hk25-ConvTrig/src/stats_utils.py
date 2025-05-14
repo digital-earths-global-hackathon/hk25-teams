@@ -25,6 +25,8 @@ def remove_daily_mean(ds, var):
         lambda x, mean: x - mean,
         ds[var].groupby("time.hour"),
         ds[var].groupby("time.hour").mean(),
+        vectorize=True,
+        dask="allowed",
     )
 
     # drop the time.hour dimension
