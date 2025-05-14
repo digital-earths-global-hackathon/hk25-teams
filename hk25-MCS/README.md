@@ -45,10 +45,10 @@ Organizers:
 - Unified Model: Data can be downloaded from the object store (see URL and how to access below) or accessed directly from a notebook (see the [UM demo notebook](https://github.com/digital-earths-global-hackathon/hk25-teams/blob/main/hk25-MCS/demo_UM_mcs_track_stats_healpix.ipynb) for details).
     - Period: 2020-02-01 to 2021-02-28 
     - Currently there are two tracked simulation with the sim IDs:
-      - um_glm_n2560_RAL3p3
-        - URL:https<nolink>://hackathon-o.s3-ext.jc.rl.ac.uk/sim-data/analysis/PyFLEXTRKR/um_glm_n2560_RAL3p3  
-      - um_glm_n1280_CoMA9_TBv1p2
-        - RL:https<nolink>://hackathon-o.s3-ext.jc.rl.ac.uk/sim-data/analysis/PyFLEXTRKR/um_glm_n1280_CoMA9_TBv1p2_catalog_par  
+    - um_glm_n2560_RAL3p3
+      - https<nolink>://hackathon-o.s3-ext.jc.rl.ac.uk/sim-data/analysis/PyFLEXTRKR/um_glm_n2560_RAL3p3  
+    - um_glm_n1280_CoMA9_TBv1p2
+      - https<nolink>://hackathon-o.s3-ext.jc.rl.ac.uk/sim-data/analysis/PyFLEXTRKR/um_glm_n1280_CoMA9_TBv1p2_catalog_par  
     
     - Those who wish to download the data can do so by using rclone (as described [here](https://github.com/digital-earths-global-hackathon/tools/blob/main/dataset_transfer/UK_s3_rclone.md), replace the URL in the example by the one above)
 
