@@ -35,3 +35,34 @@ def remove_daily_mean(ds, var):
     # return as dataset
     return xr.Dataset({var: anomalies}, coords=ds.coords)
 
+# function to do standardization
+
+def daily_standardization(ds, var):
+    """
+    standardize the data
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        The dataset containing the variable to be standardized.
+    var : str
+        The name of the variable to be standardized.
+    Returns
+    -------
+    xarray.Dataset
+        A dataset containing the standardized variable.
+
+    """
+    anomalies = xr.apply_ufunc(
+        lambda x, mean, std: (x - mean) / std,
+        ds[var].groupby("time.hour"),
+        ds[var].groupby("time.hour").mean(),
+        ds[var].groupby("time.hour").std(),
+        vectorize=True,
+        dask="allowed",
+    )
+
+    # drop the time.hour dimension
+    anomalies = anomalies.drop("hour")
+
+    # return as dataset
+    return xr.Dataset({var: anomalies}, coords=ds.coords)
