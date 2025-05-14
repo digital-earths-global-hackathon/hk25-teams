@@ -15,6 +15,11 @@ import mcs_utils
 import stats_utils
 import intake
 
+#%%
+import importlib as implib
+implib.reload(mcs_utils)
+implib.reload(stats_utils)
+
 # %%
 MCS_TRACK_FILES = {
     "icon_ngc4008": "./../data/icon_ngc4008/mcs_tracks_final_20200101.0000_20201231.2330.nc",
@@ -48,12 +53,10 @@ simu_data = (
 )
 
 
-# remove the diurnal cycle from the data
-data_field = stats_utils.remove_daily_mean(simu_data, "ts")
-
 
 # Subsample simulation data to relevant time frame
-data_field = simu_data.sel(time=slice(*ANALYSIS_TIME))
+# data_field = simu_data.sel(time=slice(*ANALYSIS_TIME))
+data_field = simu_data
 data_field = data_field.where(
     (data_field["lat"] > TROPICAL_BELT[0] - RADII.max())
     & (data_field["lat"] < TROPICAL_BELT[1] + RADII.max()),
@@ -132,8 +135,6 @@ mcs_trigger_locs["trigger_idx"] = (
 # ### Determine triggering area of MCS and remove MCSs whose trigger region includes land
 
 # %%
-import importlib as implib
-
 
 # Select increasingly smaller circular region around trigger location
 mcs_trigger_locs = mcs_utils.add_circular_trigger_areas(
@@ -143,26 +144,33 @@ mcs_trigger_locs = mcs_utils.add_circular_trigger_areas(
 # Generate mask of MCS tracks with triggering region entirely over ocean
 mcs_trigger_locs_ocean = mcs_utils.remove_land_triggers(mcs_trigger_locs, ocean_mask)
 # %%
-vars = ["ts"]
-data_sample = data_field[vars].compute()
-# %%
 
+# calculate the anomalies
+vars = ["ts"]
+
+data_ano= stats_utils.remove_daily_mean(data_field, "ts")
+data_ano = data_ano.sel(time = slice(*ANALYSIS_TIME))
+
+data_ano = data_ano.compute()
 
 # %%
 time_before_trigger = np.timedelta64(24, "h")
 
 # %%
-var_in_trigger_area_origin = {
-    var: mcs_utils.get_var_in_trigger_area(
-        mcs_trigger_locs_ocean,
-        data_sample[var],
-        times_before_trigger=time_before_trigger,
-        analysis_time=ANALYSIS_TIME,
-    )
-    for var in vars
-}
+# original data without anomaly
+# var_in_trigger_area_origin = {
+#     var: mcs_utils.get_var_in_trigger_area(
+#         mcs_trigger_locs_ocean,
+#         data_sample[var],
+#         times_before_trigger=time_before_trigger,
+#         analysis_time=ANALYSIS_TIME,
+#     )
+#     for var in vars
+# }
 
 # %%
+var = 'ts'
+
 var_in_trigger_area_ano = {
     var: mcs_utils.get_var_in_trigger_area(
         mcs_trigger_locs_ocean,
@@ -174,7 +182,11 @@ var_in_trigger_area_ano = {
 }
 
 #%%
-var = 'ts'
+# standardize the data within the largest radius
+mean = var_in_trigger_area_ano[var].mean(dim = 'radius')
+std = var_in_trigger_area_ano[var].std(dim = 'radius')
+var_in_trigger_area_ano[var] = (var_in_trigger_area_ano[var] - mean)
+
 
 # %%
 # show only plot for the anomaly, with the profile and contourf
@@ -184,14 +196,19 @@ gs = fig.add_gridspec(2, 4, width_ratios=[2, 0.7, 2, 0.7], height_ratios=[2, 1])
 ax2 = fig.add_subplot(gs[0, 2]) 
 cf1 = (
     var_in_trigger_area_ano[var]
+    .isel(tracks=np.r_[0:40, 70:var_in_trigger_area_ano[var].sizes['tracks']])
     .mean(dim=["tracks", "cell"])
-    .T.plot.contourf(ax=ax2, add_colorbar=False, levels = 20)
-)
+    .T.plot.contourf(ax=ax2, add_colorbar=True, levels=20,
+                     cbar_kwargs={"label": f"{var} / K", "shrink": 0.8, 'orientation': 'horizontal',
+                                  })
+                     )
+
 ax2.set_title(f"Anomalies {var} before MCS triggering")
 ax2.set_ylabel("timesteps before triggering / h")
 # Profile for x=0.4 (radius=0.4) for anomalies
+x_idx = 0.4
 ax3 = fig.add_subplot(gs[0, 3], sharey=ax2)
-profile1 = var_in_trigger_area_ano[var].mean(dim=["tracks", "cell"]).isel(radius=x_idx)
+profile1 = var_in_trigger_area_ano[var].mean(dim=["tracks", "cell"]).sel(radius=x_idx, method="nearest")
 profile1.plot(ax=ax3, y="time", marker="o")
 ax3.set_title("Profile at radius=0.4")
 ax3.set_xlabel(var)
@@ -208,4 +225,43 @@ ax5.set_title("Mean along time (Anomaly)")
 # Empty below ax3 for alignment
 fig.add_subplot(gs[1, 3]).axis("off")
 fig.tight_layout()
+# %%
+
+    # %%
+fig, ax = plt.subplots(6, 5, figsize=(20, 15), sharex=True, sharey=True)
+for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(None, 30))["tracks"]):
+    var_in_trigger_area_ano[var].sel(tracks=track).mean(dim="cell").plot(
+        x="radius", y="time", ax=ax[i//5, i%5], label=track,  levels=20, add_colorbar=True,
+        add_labels=True,
+        cmap="viridis", extend="both"
+    )
+
+# %%
+fig, ax = plt.subplots(6, 5, figsize=(20, 15), sharex=True, sharey=True)
+for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(30, 60))["tracks"]):
+    var_in_trigger_area_ano[var].sel(tracks=track).mean(dim="cell").plot(
+        x="radius", y="time", ax=ax[i//5, i%5], label=track, levels=20, add_colorbar=True,
+        add_labels=True,
+        cmap="viridis", extend="both"
+    )
+
+# %%
+fig, ax = plt.subplots(6, 5, figsize=(20, 15), sharex=True, sharey=True)
+for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(60, 90))["tracks"]):
+    com = var_in_trigger_area_ano[var].sel(tracks=track).mean(dim="cell").plot(
+        x="radius", y="time", ax=ax[i//5, i%5], label=track, levels=20, add_colorbar=True,
+        add_labels=True,
+        cmap="viridis", extend="both"
+    )
+
+# %%
+# %%
+fig, ax = plt.subplots(6, 5, figsize=(20, 12), sharex=True, sharey=True)
+for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(90, 120))["tracks"]):
+    var_in_trigger_area_ano[var].sel(tracks=track).mean(dim="cell").plot(
+        x="radius", y="time", ax=ax[i//5, i%5], label=track, levels=20, add_colorbar=True,
+        add_labels=True,
+        cmap="viridis", extend="both"
+    )
+
 # %%
