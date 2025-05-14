@@ -196,7 +196,6 @@ gs = fig.add_gridspec(2, 4, width_ratios=[2, 0.7, 2, 0.7], height_ratios=[2, 1])
 ax2 = fig.add_subplot(gs[0, 2]) 
 cf1 = (
     var_in_trigger_area_ano[var]
-    .isel(tracks=np.r_[0:40, 70:var_in_trigger_area_ano[var].sizes['tracks']])
     .mean(dim=["tracks", "cell"])
     .T.plot.contourf(ax=ax2, add_colorbar=True, levels=20,
                      cbar_kwargs={"label": f"{var} / K", "shrink": 0.8, 'orientation': 'horizontal',
@@ -225,6 +224,7 @@ ax5.set_title("Mean along time (Anomaly)")
 # Empty below ax3 for alignment
 fig.add_subplot(gs[1, 3]).axis("off")
 fig.tight_layout()
+plt.savefig("/work/mh0033/m300883/hk25_plots/temperature_ano_compoiste.png", dpi=300)
 
 
 # %%
@@ -235,6 +235,7 @@ for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(None
         add_labels=True,
         cmap="viridis", extend="both"
     )
+plt.savefig("/work/mh0033/m300883/hk25_plots/temperature_track_1.png", dpi=300)
 
 # %%
 fig, ax = plt.subplots(6, 5, figsize=(20, 15), sharex=True, sharey=True)
@@ -244,6 +245,7 @@ for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(30, 
         add_labels=True,
         cmap="viridis", extend="both"
     )
+plt.savefig("/work/mh0033/m300883/hk25_plots/temperature_track_2.png", dpi=300)
 
 # %%
 fig, ax = plt.subplots(6, 5, figsize=(20, 15), sharex=True, sharey=True)
@@ -253,6 +255,7 @@ for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(60, 
         add_labels=True,
         cmap="viridis", extend="both"
     )
+plt.savefig("/work/mh0033/m300883/hk25_plots/temperature_track_3.png", dpi=300)
 
 # %%
 # %%
@@ -263,5 +266,6 @@ for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(90, 
         add_labels=True,
         cmap="viridis", extend="both"
     )
+plt.savefig("/work/mh0033/m300883/hk25_plots/temperature_track_4.png", dpi=300)
 
 # %%
