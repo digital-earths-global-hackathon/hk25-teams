@@ -12,6 +12,7 @@ import sys
 
 sys.path.append("../src")
 import mcs_utils
+import stats_utils
 import intake
 
 # %%
@@ -46,7 +47,10 @@ simu_data = (
     .pipe(egh.attach_coords)
 )
 
-# %%
+
+# remove the diurnal cycle from the data
+data_field = stats_utils.remove_daily_mean(simu_data, "ts")
+
 
 # Subsample simulation data to relevant time frame
 data_field = simu_data.sel(time=slice(*ANALYSIS_TIME))
@@ -56,6 +60,8 @@ data_field = data_field.where(
     drop=True,
 )
 
+
+#%%
 # Get the lat/lon coordinates of the healpix grid
 hp_grid = data_field[["lat", "lon"]].compute()
 
@@ -76,7 +82,7 @@ cat_tracks = mcs_tracks[
 ]
 cat_tracks = cat_tracks.compute().to_dataframe()
 
-# %%
+
 
 # Subsample relevant information
 mcs_tracks = mcs_tracks[
@@ -141,25 +147,6 @@ vars = ["ts"]
 data_sample = data_field[vars].compute()
 # %%
 
-
-# function to remove the daily mean from the data
-def remove_daily_mean(ds, var):
-
-    anomalies = xr.apply_ufunc(
-        lambda x, mean: x - mean,
-        ds[var].groupby("time.hour"),
-        ds[var].groupby("time.hour").mean(),
-    )
-
-    # drop the time.hour dimension
-    anomalies = anomalies.drop("hour")
-
-    # return as dataset
-    return xr.Dataset({var: anomalies}, coords=ds.coords)
-
-
-# %%
-data_ano = remove_daily_mean(data_sample, 'ts')
 
 # %%
 time_before_trigger = np.timedelta64(24, "h")
