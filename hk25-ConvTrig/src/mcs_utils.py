@@ -355,9 +355,9 @@ def _get_var_in_trigger_area_multiple(
         pre_mcs_start_basetime = mcs_start_basetime - times_before_trigger
         if pre_mcs_start_basetime < analysis_time[0]: continue
         var_before_trigger = data_field.sel(
-            time=slice(pre_mcs_start_basetime, mcs_start_basetime),
+            time=slice(pre_mcs_start_basetime, pre_mcs_start_basetime + times_before_trigger - np.timedelta64(1, 'h')), # change
         )
-
+        
         for i, radius in enumerate(mcs_trigger_locs['radius']):
             trigger_area_idxs = _select_trigger_area_idxs(
                 mcs_trigger_locs, track, radius
