@@ -225,9 +225,9 @@ ax5.set_title("Mean along time (Anomaly)")
 # Empty below ax3 for alignment
 fig.add_subplot(gs[1, 3]).axis("off")
 fig.tight_layout()
-# %%
 
-    # %%
+
+# %%
 fig, ax = plt.subplots(6, 5, figsize=(20, 15), sharex=True, sharey=True)
 for i, track in enumerate(var_in_trigger_area_ano["ts"].isel(tracks = slice(None, 30))["tracks"]):
     var_in_trigger_area_ano[var].sel(tracks=track).mean(dim="cell").plot(
