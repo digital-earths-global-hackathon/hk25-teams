@@ -14,12 +14,22 @@ sys.path.append("../src")
 import mcs_utils
 import stats_utils
 import intake
+#%%
+import slurm_cluster as scluster
+
 
 # %%
 import importlib as implib
 
 implib.reload(mcs_utils)
 implib.reload(stats_utils)
+#%%
+# %%
+client, cluster = scluster.init_dask_slurm_cluster(
+    scale = 5, processes = 20, walltime="04:00:00", memory="200GB", dash_address=8989
+)
+
+
 
 # %%
 MCS_TRACK_FILES = {
@@ -35,8 +45,8 @@ PRODUCT = "icon_d3hp003"
 ZOOM = 9
 TIME = "PT1H"
 ANALYSIS_TIME = (
-    np.datetime64("2020-02-01T00:00:00"),
-    np.datetime64("2020-02-15T00:00:00"),
+    np.datetime64("2020-01-01T00:00:00"),
+    np.datetime64("2021-01-01T00:00:00"),
 )
 
 # analysis-specific user seetings
@@ -55,7 +65,7 @@ simu_data = (
 
 
 # Subsample simulation data to relevant time frame
-# data_field = simu_data.sel(time=slice(*ANALYSIS_TIME))
+data_field = simu_data.sel(time=slice(*ANALYSIS_TIME))
 data_field = simu_data
 data_field = data_field.where(
     (data_field["lat"] > TROPICAL_BELT[0] - RADII.max())
@@ -145,14 +155,10 @@ mcs_trigger_locs_ocean = mcs_utils.remove_land_triggers(mcs_trigger_locs, ocean_
 # %%
 
 # calculate the anomalies
-vars = ["pr"]
-var = "pr"
+vars = ["pr", "ts", "uas", "vas"]
 
 # data_ano= stats_utils.remove_daily_mean(data_field, var)
 data_ano = data_field
-data_ano = data_ano.sel(time=slice(*ANALYSIS_TIME))
-
-data_ano = data_ano.compute()
 
 # %%
 time_before_trigger = np.timedelta64(24, "h")
@@ -180,6 +186,22 @@ var_in_trigger_area_ano = {
     )
     for var in vars
 }
+#%%
+# to xarray
+var_in_trigger_area_ano = xr.Dataset(var_in_trigger_area_ano)
+var_in_trigger_area_ano.to_netcdf(
+    "/work/mh0033/m300883/hk25_data/PT1H/var_before_trigger_ano.nc"
+)
+
+
+
+#%%
+
+
+
+
+
+
 
 
 # %%
