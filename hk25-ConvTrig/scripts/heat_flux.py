@@ -14,12 +14,21 @@ sys.path.append("../src")
 import mcs_utils
 import stats_utils
 import intake
+import slurm_cluster as scluster
+
 
 # %%
 import importlib as implib
 
 implib.reload(mcs_utils)
 implib.reload(stats_utils)
+
+# %%
+# %%
+client, cluster = scluster.init_dask_slurm_cluster(
+    scale = 5, processes = 10, walltime="04:00:00", memory="200GB", dash_address=8787
+)
+
 
 # %%
 MCS_TRACK_FILES = {
@@ -35,7 +44,7 @@ PRODUCT = "icon_d3hp003"
 ZOOM = 9
 TIME = "PT3H"
 ANALYSIS_TIME = (
-    np.datetime64("2020-02-01T00:00:00"), np.datetime64("2020-02-15T00:00:00")
+    np.datetime64("2020-02-01T00:00:00"), np.datetime64("2021-01-01T00:00:00")
     )
 
 # analysis-specific user seetings
