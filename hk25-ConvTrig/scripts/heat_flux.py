@@ -135,11 +135,11 @@ mcs_trigger_locs["trigger_idx"] = (
     ),
 )
 
-# select the size of the MCS > 10 000 km2
-mcs_trigger_locs = mcs_trigger_locs.where(
-    (mcs_trigger_locs["area"] > 10000),
-    drop=True,
-)
+# # select the size of the MCS > 10 000 km2
+# mcs_trigger_locs = mcs_trigger_locs.where(
+#     (mcs_trigger_locs["area"] > 10000),
+#     drop=True,
+# )
 
 # %%
 # %% [markdown]
@@ -157,7 +157,7 @@ mcs_trigger_locs_ocean = mcs_utils.remove_land_triggers(mcs_trigger_locs, ocean_
 # %%
 
 # calculate the anomalies
-vars = ["hflsd", "hfssd"]# latent heat, sensible heat
+vars = ["hflsd", "hfssd", "prw"]# latent heat, sensible heat, precipitation
 
 # data_ano= stats_utils.remove_daily_mean(data_field, var)
 data_ano = data_field[vars]
@@ -193,11 +193,13 @@ var_in_trigger_area_ano = {
     )
     for var in vars
 }
-
+#%%
+# dic to xarray
+var_in_trigger_area_ano = xr.Dataset(var_in_trigger_area_ano)
 
 #%%
-var_in_trigger_area_ano.to_netcdf("/work/mh0033/m300883/hk25_data/heatflux_ano.nc")
-
+# save
+var_in_trigger_area_ano.to_netcdf("/work/mh0033/m300883/hk25_data/PT3H_var_before.nc")
 
 
 # %%
