@@ -35,7 +35,7 @@ ZOOM = 9
 TIME = "PT1H"
 ANALYSIS_TIME = (
     np.datetime64("2020-02-01T00:00:00"),
-    np.datetime64("2020-02-15T00:00:00"),
+    np.datetime64("2020-08-01T00:00:00"),
 )
 
 # analysis-specific user seetings
@@ -181,25 +181,17 @@ var_in_trigger_area_ano = {
     for var in vars
 }
 
-#%%
-# standardize the data within the largest radius
-mean = var_in_trigger_area_ano[var].mean(dim = 'radius')
-std = var_in_trigger_area_ano[var].std(dim = 'radius')
-var_in_trigger_area_ano[var] = (var_in_trigger_area_ano[var] - mean)
-
 
 # %%
 # show only plot for the anomaly, with the profile and contourf
 fig = plt.figure(figsize=(16, 10))
-gs = fig.add_gridspec(2, 4, width_ratios=[2, 0.7, 2, 0.7], height_ratios=[2, 1])
+gs = fig.add_gridspec(2, 4, width_ratios=[2, 0.7, 2, 0.7], height_ratios=[2, 0.5])
 # Anomaly data contourf
 ax2 = fig.add_subplot(gs[0, 2]) 
 cf1 = (
     var_in_trigger_area_ano[var]
     .mean(dim=["tracks", "cell"])
-    .T.plot.contourf(ax=ax2, add_colorbar=True, levels=20,
-                     cbar_kwargs={"label": f"{var} / K", "shrink": 0.8, 'orientation': 'horizontal',
-                                  })
+    .T.plot.contourf(ax=ax2, add_colorbar=False, levels=20)
                      )
 
 ax2.set_title(f"Anomalies {var} before MCS triggering")
@@ -223,6 +215,16 @@ ax5.set_ylabel(f"Mean {var} / K")
 ax5.set_title("Mean along time (Anomaly)")
 # Empty below ax3 for alignment
 fig.add_subplot(gs[1, 3]).axis("off")
+
+# add colorbar below the ax3
+cbar_ax = fig.add_axes([0.85, 0.15, 0.15, 0.03])
+cbar = fig.colorbar(cf1, cax=cbar_ax, orientation="horizontal")
+cbar.set_label(f"{var} / mm day -1")
+# Set colorbar ticklabels every 4 ticks
+ticks = cbar.ax.get_xticks()
+cbar.ax.set_xticks(ticks[::3])
+cbar.ax.set_xticklabels([f"{tick:.0f}" for tick in ticks[::3]])
+
 fig.tight_layout()
 plt.savefig("/work/mh0033/m300883/hk25_plots/temperature_ano_compoiste.png", dpi=300)
 
