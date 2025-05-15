@@ -48,7 +48,7 @@ simu_data = cat[PRODUCT](zoom=ZOOM, time=TIME, chunks="auto").to_dask().\
     pipe(egh.attach_coords)
 
 # Subsample simulation data to relevant time frame
-data_field = simu_data.sel(time=slice(*ANALYSIS_TIME))
+data_field = simu_data
 data_field = data_field.where(
     (data_field['lat'] > TROPICAL_BELT[0]-RADII.max()) &
     (data_field['lat'] < TROPICAL_BELT[1]+RADII.max()), drop=True,
@@ -73,14 +73,14 @@ mcs_tracks = xr.open_dataset(
     "/work/mh0033/m221071/works/hk25/d3hp003/hk25-mcs/PyFLEXTRKR/icon_d3hp003/mcs_tracking_hp9/stats/mcs_tracks_final_20200102.0000_20201231.2330.nc"
 )
 cat_tracks = mcs_tracks[
-    ["start_split_cloudnumber", "start_basetime", "meanlat", "meanlon"]
+    ["area", "start_split_cloudnumber", "start_basetime", "meanlat", "meanlon"]
 ]
 cat_tracks = cat_tracks.compute().to_dataframe()
 
 
 # Subsample relevant information
 mcs_tracks = mcs_tracks[
-    ["start_split_cloudnumber", "start_basetime", "meanlat", "meanlon"]
+    ["area","start_split_cloudnumber", "start_basetime", "meanlat", "meanlon"]
 ].compute()
 
 # Subsample MCS tracks to relevant time frame
@@ -89,6 +89,7 @@ mcs_tracks = mcs_tracks.where(
     & (mcs_tracks["start_basetime"] < ANALYSIS_TIME[1]),
     drop=True,
 )
+
 
 # Select all tracks that don't start as a splitter but are triggered
 mcs_tracks_triggered = mcs_tracks.where(
@@ -103,10 +104,13 @@ mcs_trigger_locs = mcs_tracks_triggered.drop_vars(
     ["meanlat", "meanlon", "start_split_cloudnumber", "times"]
 )
 
+# select the size 
+
+
 # Select only tropical start locations of MCSs
 mcs_trigger_locs = mcs_trigger_locs.where(
     (mcs_trigger_locs["start_lat"] > TROPICAL_BELT[0])
-    & (mcs_trigger_locs["start_lat"] < TROPICAL_BELT[1]),
+    & (mcs_trigger_locs["start_lat"] < TROPICAL_BELT[1]) ,
     drop=True,
 )
 
@@ -121,6 +125,13 @@ mcs_trigger_locs["trigger_idx"] = (
         lonlat=True,
     ),
 )
+
+# select the size of the MCS > 10 000 km2
+mcs_trigger_locs = mcs_trigger_locs.where(
+    (mcs_trigger_locs["area"] > 10000),
+    drop=True,
+)
+
 # %%
 # %% [markdown]
 # ### Determine triggering area of MCS and remove MCSs whose trigger region includes land
@@ -141,9 +152,9 @@ vars = ["hflsd", "hfssd"]# latent heat, sensible heat
 
 # data_ano= stats_utils.remove_daily_mean(data_field, var)
 data_ano = data_field[vars]
-data_ano = data_ano.sel(time=slice(*ANALYSIS_TIME))
+# data_ano = data_ano.sel(time=slice(*ANALYSIS_TIME))
 
-data_ano = data_ano.compute()
+# data_ano = data_ano.compute()
 
 
 # %%
@@ -173,6 +184,11 @@ var_in_trigger_area_ano = {
     )
     for var in vars
 }
+
+
+#%%
+var_in_trigger_area_ano.to_netcdf("/work/mh0033/m300883/hk25_data/heatflux_ano.nc")
+
 
 
 # %%
