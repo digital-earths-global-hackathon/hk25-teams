@@ -26,7 +26,7 @@ implib.reload(stats_utils)
 # %%
 # %%
 client, cluster = scluster.init_dask_slurm_cluster(
-    scale = 5, processes = 10, walltime="04:00:00", memory="200GB", dash_address=8787
+    scale = 5, processes = 20, walltime="07:00:00", memory="200GB", dash_address=8282
 )
 
 
@@ -39,7 +39,7 @@ MCS_TRACK_FILES = {
 
 CATALOG = "https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml"
 LOCATION = "EU"     #Other possibility: 'online', but 'EU' ensures local download
-PRODUCT = "icon_d3hp003"
+PRODUCT = "icon_ngc4008"
 
 ZOOM = 9
 TIME = "PT3H"
@@ -63,83 +63,73 @@ data_field = data_field.where(
     (data_field['lat'] < TROPICAL_BELT[1]+RADII.max()), drop=True,
     )
 
+data_field = data_field.sel(time=slice(*ANALYSIS_TIME))
 
 
 # %%
 # Get the lat/lon coordinates of the healpix grid
-hp_grid = data_field[["lat", "lon"]].compute()
+hp_grid = data_field[['lat', 'lon']].compute()
 
 # Get land-sea-mask
-# Get land-sea-mask
-ofs = data_field["sftlf"]
-land_mask = ofs.where(ofs > 0).compute()
-
-ocean_mask = np.isnan(land_mask)
-ocean_mask = ocean_mask.where(ocean_mask == 1)
+ofs = data_field['ocean_fraction_surface']
+ocean_mask = ofs.where(ofs==1).compute()
 # %%
-# Read in MCS tracks
-mcs_tracks = xr.open_dataset(
-    "/work/mh0033/m221071/works/hk25/d3hp003/hk25-mcs/PyFLEXTRKR/icon_d3hp003/mcs_tracking_hp9/stats/mcs_tracks_final_20200102.0000_20201231.2330.nc"
-)
-cat_tracks = mcs_tracks[
-    ["area", "start_split_cloudnumber", "start_basetime", "meanlat", "meanlon"]
-]
-cat_tracks = cat_tracks.compute().to_dataframe()
+MCS_TRACK_FILES = {
+    "icon_ngc4008": \
+        "/work/mh0731/m300738/project_hk25-ConvTrig/data/icon_ngc4008/mcs_tracks_final_20200101.0000_20201231.2330.nc",
+    "icon_d3hp003": \
+        "./../data/icon_d3hp003/mcs_tracks_final_20200102.0000_20201231.2330.nc",
+    "scream-dkrz": \
+        "./../data/scream-dkrz/mcs_tracks_final_20190901.0000_20200901.0000.nc",
+    "um_glm_n2560_RAL3p3": \
+        "./../data/um_glm_n2560_RAL3p3/mcs_tracks_final_20200201.0000_20210301.0000.nc",
+    }
 
+# Read in MCS tracks
+mcs_tracks = xr.open_dataset(MCS_TRACK_FILES[PRODUCT], chunks={})
 
 # Subsample relevant information
 mcs_tracks = mcs_tracks[
-    ["area","start_split_cloudnumber", "start_basetime", "meanlat", "meanlon"]
-].compute()
+    ['start_split_cloudnumber', 'start_basetime', 'meanlat', 'meanlon']
+    ].compute()
 
 # Subsample MCS tracks to relevant time frame
 mcs_tracks = mcs_tracks.where(
-    (mcs_tracks["start_basetime"] > ANALYSIS_TIME[0])
-    & (mcs_tracks["start_basetime"] < ANALYSIS_TIME[1]),
+    (mcs_tracks['start_basetime'] > ANALYSIS_TIME[0]) &
+    (mcs_tracks['start_basetime'] < ANALYSIS_TIME[1]),
     drop=True,
-)
-
+    )
 
 # Select all tracks that don't start as a splitter but are triggered
 mcs_tracks_triggered = mcs_tracks.where(
-    np.isnan(mcs_tracks["start_split_cloudnumber"]),
-    drop=True,
-)
+    np.isnan(mcs_tracks["start_split_cloudnumber"]), drop=True,
+    )
 
 # Keep only the start location of the tracks
-mcs_tracks_triggered["start_lat"] = mcs_tracks_triggered["meanlat"].isel(times=0)
-mcs_tracks_triggered["start_lon"] = mcs_tracks_triggered["meanlon"].isel(times=0)
+mcs_tracks_triggered['start_lat'] = mcs_tracks_triggered['meanlat'].isel(times=0)
+mcs_tracks_triggered['start_lon'] = mcs_tracks_triggered['meanlon'].isel(times=0)
 mcs_trigger_locs = mcs_tracks_triggered.drop_vars(
-    ["meanlat", "meanlon", "start_split_cloudnumber", "times"]
-)
-
-# select the size 
-
+    ['meanlat', 'meanlon', 'start_split_cloudnumber', 'times']
+    )
 
 # Select only tropical start locations of MCSs
 mcs_trigger_locs = mcs_trigger_locs.where(
-    (mcs_trigger_locs["start_lat"] > TROPICAL_BELT[0])
-    & (mcs_trigger_locs["start_lat"] < TROPICAL_BELT[1]) ,
+    (mcs_trigger_locs['start_lat'] > TROPICAL_BELT[0]) &
+    (mcs_trigger_locs['start_lat'] < TROPICAL_BELT[1]),
     drop=True,
-)
+    )
 
 # Assign the healpix cell index to each trigger location
-mcs_trigger_locs["trigger_idx"] = (
-    "tracks",
+mcs_trigger_locs['trigger_idx'] = (
+    'tracks',
     hp.ang2pix(
         egh.get_nside(hp_grid),
-        mcs_trigger_locs["start_lon"].values,
-        mcs_trigger_locs["start_lat"].values,
-        nest=True,
-        lonlat=True,
-    ),
+        mcs_trigger_locs['start_lon'].values,
+        mcs_trigger_locs['start_lat'].values,
+        nest=True, lonlat=True,
+        ),
 )
 
-# # select the size of the MCS > 10 000 km2
-# mcs_trigger_locs = mcs_trigger_locs.where(
-#     (mcs_trigger_locs["area"] > 10000),
-#     drop=True,
-# )
 
 # %%
 # %% [markdown]
@@ -157,7 +147,7 @@ mcs_trigger_locs_ocean = mcs_utils.remove_land_triggers(mcs_trigger_locs, ocean_
 # %%
 
 # calculate the anomalies
-vars = ["hflsd", "hfssd", "prw"]# latent heat, sensible heat, precipitation
+vars = ["hfls", "hfss", "prw"]# latent heat, sensible heat, precipitation
 
 # data_ano= stats_utils.remove_daily_mean(data_field, var)
 data_ano = data_field[vars]
