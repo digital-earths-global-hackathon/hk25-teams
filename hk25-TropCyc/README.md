@@ -2,66 +2,55 @@
 
 Tropical Cyclones (TCs) are intense organised convective systems that are responsible for nearly half of the worldwide disaster-related costs (CRED & UNDRR, 2020). Historically, they have been difficult to represent in coarse-resolution climate models because of their small size and their sensitivity to convective parametrisations. It has been shown that increasing resolution to 25km allows models to represent the number and distribution of cyclones correctly (Roberts et al. 2020), but the intensity remains largely underestimated, and the structure is not well represented (Bourdin et al. 2024). Baker et al. (2024) showed that increasing resolution up to 5km improves the realism of intensity, intensification rate, lifecycle and structure of TCs in NextGEMS simulations.
 
-In this team, we will investigate how TCs are represented in the new sets of simulations in terms of statistics, structure, lifecycle and link with the environment.
+In this team, we investigated how TCs are represented in the new sets of simulations in terms of statistics, structure, lifecycle and link with the environment.
 
 **Coordination**: Stella Bourdin (stella.bourdin@physics.ox.ac.uk), Alex Baker (alexander.baker@reading.ac.uk), Arthur Avenas (arthur.avenas@esa.int), Xu Chen (chenx@g.ecc.u-tokyo.ac.jp)
 
-Sketch of initial activities:
-* Track TCs in the simulations using TempestExtremes -> Assess TCs statistics, particularly in terms of intensity and intensification rates
-* Retrieve snapshots of tropical cyclones’ structure -> Assess tropical cyclones structure
-* Retrieve/compute variables associated with environmental favourability for TC (e.g. GPI) -> Assess how the environment controls TCs, particularly the moisture field and the components of Potential Intensity
-* Comparison of TC tracks from re-analyses / models and from satellite observations
+In this folder we leave for legacy scripts to track TCs in the simulations, as well as some of the data (in particular track datasets).
 
+## Useful resources
 
-*Find the link to the Monitoring Google Sheet on Mattermost, it is kept out of the public GitHub to avoid potential issues.*
+* [TempestExtremes](https://github.com/ClimateGlobalChange/tempestextremes)
 
-## First steps
+  Some introductory content is provided in `notebooks/TE_intro.ipynb` & `notebooks/TE_tracking_UZ.ipynb`.
 
-1. Introduce yourself as a member of the team:
-* Say Hi in this channel, introduce yourself, your relevant experience/skills (if close to none, that fine!), and your goals for this hackathon within the team
-* Go the the Monitoring Google sheet linked at the top of this channel, into the "Members" tab, and register you name, address and mattermost handle (might be needed for communication after the event).
-* If your node does not already have a designated member as point of contact, you can volunteer yourself.
-* If you are in-person at a node, try to find the other members from that node to work together!
+* [HuracanPy](https://huracanpy.readthedocs.io/en/latest/)
 
-2. Acknowledge the available resources:
+## Connectivity Files for TempestExtremes
 
-* How to Hack 2025 page on Github
-* Science Plan
-* Your node documentation
-* HuracanPy may be a useful tool for your analyses.
-
-3. Prepare your working environment:
-
-* Install your hackathon environment following instructions provided for your node/machine
-* Install tempestextremes in that environment
-* Fork and clone the hk25-teams or its hk25-TropCyc subset git as a working space.
+With great help from Bryce Harrop, we are now able to run TempestExtremes on HealPix, using dedicated ConnectivityFiles. 
+Files can be generated using instructions in `notebooks/1_Get_Connectivity_Files/`. Corresponding files for zoom 0-2 are provided via GitHub in `ConnectivityFiles` while files for zoom 3-10 can be found on JASMIN in `/home/users/sbourdin/WCRP_Hackathon/hk25-teams/hk25-TropCyc/ConnectivityFiles/` or in [this Google Drive folder](https://drive.google.com/drive/folders/1fNDDQA_G-yy05SP8J8pV2EIFJCs1bOtb?usp=sharing).
 
 ## TC tracking
 
-The first and main task will be the tracking of the tropical cyclones in as many simulations as possible.
-To coordinate this, check out the Monitoring sheet, especially the "Plan" for steps and "TC tracks" tabs.
+In the scope of this hackathon, TC tracking has been performed with two algorithms, in any case using the TempestExtremes software:
 
-Following these steps will help make sure we are the most efficient, without the same simulation being tracked several times, and consistent, with the same algorithm being applied to all simulations
+* UZ (Zarzycki et Ullrich, 2017; Ullrich et al., 2021) when geopotential on pressure levels was available;
+* UZ-2D (Unpublished, see notebook for script, contact S. Bourdin for info) when it was not.
 
-1. Identify the simulations to be tracked by you or your team.
-These may be simulations that are stored at your node, hence easier to access, or simulations you are really interested in and want to be sure someone takes care of them.
-If necessary, exchange on the Mattermost channel to coordinate with other people.
--> Update the Monitoring TC tracks tab with the simulation you want to track
+For each algorithm, the process is in two steps:
 
-2. Distribute the tracking tasks among the team members -> Update the Monitoring TC tracks tab with the handles of the responsible members for each simulation
+1. Download the necessary data on HealPix zoom 8 (~25km is supposedly a good compromise) with the script in `notebooks/2_TC_tracking/UZ_tracking_pre-processing.ipynb` or `2D_tracking_pre-processing.ipynb` (depending on which algorithm you want to run). Data will be chuncked into monthly files which is a good compromise for efficiency/memory use.
 
-3. Get familiar with the tracking process: Check-out the pre-processing, TE_intro and TE_full notebooks to understand how it works.
+2. Run the tracking with the script in `notebooks/2_TC_tracking/UZ_tracking_TempestExtremes.ipynb` or `2D_tracking_TempestExtremes.ipynb`.
 
-4. Run the tracking with the full_tracking notebook (or turn it into a script if necessary).
+At the end of the process, you will obtain the tracks as a CSV file, whose name is the name of the simulation.
 
-5. Check the tracks you obtained (An image will be generated at the end of the full_tracking script to get a first glance.
-
-6. Upload the tracks to hk25-TropCyc/TC_tracks/ with one csv file per simulation, named with the simulation code. Update the Monitoring TC tracks once this is done
 
 *Technical details*:
 TCs are to be tracked in all relevant simulations (i.e. simulations covering TC-prone areas) using TempestExtremes and the algorithm described in Ullrich et al. 2021.
 Output should include, a minima, track_id, time, lon, lat, maximum wind speed in a 2°GCD radius and minimum SLP.
 
-Note: If some simulations don't have the necessary data for the tracking, an alternative 2D algorithm can be applied - please reach out if that's the case.
+## TC-centered snapshot retrieval
 
-![image](tracking_process.png)
+Instructions are provided to retrieve TC-centered snapshots in `notebooks/3_snapshot_retrieval/`.
+As for the tracking, two steps are required:
+
+1. Download the necessary data (at highest zoom level available this time) with the `Pre-processing` script (available as notebook for one variable at a time, or as a bash script for several variables)
+2. Run NodeFileCompose as in the `NodeFileCompose` script (available as notebook for one variable at a time, or as a bash script for several variables)
+
+NB: It is recommended to adjust the snapshots' output grid to match the zoom level.
+
+Snapshots files are too heavy to be shared via GitHub. 
+They will be available on JASMIN at `/home/users/sbourdin/WCRP_Hackathon/hk25-teams/hk25-TropCyc/snapshot` and
+I will try to share them through [this Google Drive folder](https://drive.google.com/drive/folders/1fNDDQA_G-yy05SP8J8pV2EIFJCs1bOtb?usp=sharing)

@@ -170,3 +170,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .DS_Store
+
+# Data and figures generated for tropical cyclone track assessment
+cymep-data/
+cymep-figs/

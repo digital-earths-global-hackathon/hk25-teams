@@ -14,3 +14,8 @@ To this end, we propose to extract so-called “virtual curtains” from the sim
 
 ![](fig1.png "EarthCARE orbital tracks")
 ![](fig2.gif "ICON and EarthCARE curtains during ORCESTRA")
+
+#### Our activities
+We uploaded our code to a seperate GitHub repository which you can find here:
+https://github.com/yoctoyotta1024/GlobalHackathon2025, e.g. for downloading EarthCARE curtains,
+extracting curtains from GSRMs, and plotting them all.
