@@ -9,8 +9,6 @@
 # - Zhe Feng || zhe.feng@pnnl.gov 
 # - Ziming Chen || ziming.chen@pnnl.gov
 
-# In[1]:
-
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -25,14 +23,7 @@ plt.rcParams['figure.dpi'] = 72
 
 
 # ### Load the catalog
-
-# In[2]:
-
-
 list(intake.open_catalog("https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml"))
-
-
-# In[3]:
 
 
 # Load the NERSC catalog
@@ -42,9 +33,6 @@ list(cat)
 
 
 # ### Pick a Dataset
-
-# In[4]:
-
 s_Model = "nicam_gl11" # "icon_d3hp003" # "um_glm_n2560_RAL3p3" # "casesm2_10km_nocumulus" # "icon_ngc4008" # 
 s_TimeRes = "PT6H"
 #
@@ -55,14 +43,9 @@ pd.DataFrame(cat[s_Model].describe()["user_parameters"])
 # ### Load Data into a Data Set
 # most datasets have a `zoom` parameter. We will use `zoom` level 8 [(~24km)](https://easy.gems.dkrz.de/Processing/healpix/index.html#healpix-spatial-resolution)
 
-# In[5]:
-
 ds0  = cat[s_Model](zoom=zoom, time=s_TimeRes).to_dask()
 ds0  = ds0.pipe(egh.attach_coords)
 ds0
-
-
-# In[ ]:
 
 
 # Variables to output
@@ -88,9 +71,6 @@ varout_dict       = { 'time' : 'time',
                       'rlut': 'rlut',
                      }
 print(ds0.data_vars)
-
-
-# In[22]:
 
 
 # Subset variables and rename
@@ -122,15 +102,10 @@ ds
 # %%
 ds.data_vars
 
-# In[ ]:
-
 
 # Compute the uivt and vivt
 
 # Python function for vertical mass integration using xarray and numpy
-import numpy as np
-import xarray as xr
-
 def vertical_mass_integration(hus: xr.DataArray, ps: xr.DataArray, plev: xr.DataArray) -> xr.DataArray:
     """
     Perform vertical integration of specific humidity (hus) in pressure coordinates.
@@ -169,7 +144,6 @@ def vertical_mass_integration(hus: xr.DataArray, ps: xr.DataArray, plev: xr.Data
 
     return result
 
-# In[ ]:
 out_dir = f'/pscratch/sd/w/wcmca1/scream-cess-healpix/data4TE/{s_Model}_{s_TimeRes}/'
 
 # Optional: create output directory
