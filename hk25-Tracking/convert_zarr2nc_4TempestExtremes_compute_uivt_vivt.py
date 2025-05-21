@@ -19,37 +19,18 @@ import os
 import easygems.healpix as egh
 import intake
 
-plt.rcParams['figure.dpi'] = 72
-
-
-# ### Load the catalog
-list(intake.open_catalog("https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml"))
-
-
+# ========= User Configuration ==================
 # Load the NERSC catalog
 current_location = "NERSC" # "online" # 
-cat = intake.open_catalog("https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml")[current_location]
-list(cat)
-
-
 # ### Pick a Dataset
 s_Model = "nicam_gl11" # "icon_d3hp003" # "um_glm_n2560_RAL3p3" # "casesm2_10km_nocumulus" # "icon_ngc4008" # 
 s_TimeRes = "PT6H"
 #
 zoom = 8
-pd.DataFrame(cat[s_Model].describe()["user_parameters"])
-
-
-# ### Load Data into a Data Set
-# most datasets have a `zoom` parameter. We will use `zoom` level 8 [(~24km)](https://easy.gems.dkrz.de/Processing/healpix/index.html#healpix-spatial-resolution)
-
-ds0  = cat[s_Model](zoom=zoom, time=s_TimeRes).to_dask()
-ds0  = ds0.pipe(egh.attach_coords)
-ds0
-
+out_dir = f'/pscratch/sd/w/wcmca1/scream-cess-healpix/data4TE/{s_Model}_{s_TimeRes}/'
 
 # Variables to output
-### RawVarName: output_name
+### {RawVarName: output_name}
 varout_dict       = { 'time' : 'time',
                       'lat' : 'lat',
                       'lon' : 'lon',
@@ -70,6 +51,25 @@ varout_dict       = { 'time' : 'time',
                       'tas': 'tas',
                       'rlut': 'rlut',
                      }
+# ========= User Configuration ==================
+
+
+plt.rcParams['figure.dpi'] = 72
+
+
+# ### Load the catalog
+list(intake.open_catalog("https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml"))
+cat = intake.open_catalog("https://digital-earths-global-hackathon.github.io/catalog/catalog.yaml")[current_location]
+list(cat)
+
+pd.DataFrame(cat[s_Model].describe()["user_parameters"])
+
+
+# ### Load Data into a Data Set
+# most datasets have a `zoom` parameter. We will use `zoom` level 8 [(~24km)](https://easy.gems.dkrz.de/Processing/healpix/index.html#healpix-spatial-resolution)
+
+ds0  = cat[s_Model](zoom=zoom, time=s_TimeRes).to_dask()
+ds0  = ds0.pipe(egh.attach_coords)
 print(ds0.data_vars)
 
 
@@ -144,7 +144,6 @@ def vertical_mass_integration(hus: xr.DataArray, ps: xr.DataArray, plev: xr.Data
 
     return result
 
-out_dir = f'/pscratch/sd/w/wcmca1/scream-cess-healpix/data4TE/{s_Model}_{s_TimeRes}/'
 
 # Optional: create output directory
 os.makedirs(out_dir, exist_ok=True)
