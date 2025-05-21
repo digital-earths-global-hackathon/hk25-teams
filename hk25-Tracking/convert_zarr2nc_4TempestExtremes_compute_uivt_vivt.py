@@ -6,7 +6,8 @@
 # ## This code compute the uivt and vivt based on ua, va, and hus
 # 
 # ## Author:
-# - Zhe Feng || zhe.feng@pnnl.gov
+# - Zhe Feng || zhe.feng@pnnl.gov 
+# - Ziming Chen || ziming.chen@pnnl.gov
 
 # In[1]:
 
@@ -303,14 +304,14 @@ for month, ds_month in ds.groupby('time.month'):
             #
             # Add back history with timestamp of this processing
             if original_history:
-                new_vars_only.attrs['history'] = f"{new_history}; {original_history}"
+                ds_month_year.attrs['history'] = f"{new_history}; {original_history}"
             else:
-                new_vars_only.attrs['history'] = new_history
+                ds_month_year.attrs['history'] = new_history
             # Add additional metadata
-            new_vars_only.attrs['source_model'] = s_Model
-            new_vars_only.attrs['time_resolution'] = s_TimeRes
-            new_vars_only.attrs['healpix_zoom'] = zoom
-            new_vars_only.attrs['processing_script'] = "convert_zarr2nc_4TempestExtremes_compute_uivt_vivt.py"
+            ds_month_year.attrs['source_model'] = s_Model
+            ds_month_year.attrs['time_resolution'] = s_TimeRes
+            ds_month_year.attrs['healpix_zoom'] = zoom
+            ds_month_year.attrs['processing_script'] = "convert_zarr2nc_4TempestExtremes_compute_uivt_vivt.py"
             #
             ds_month_year.to_netcdf(out_file)
             print(f"Created new file: {out_file}")
