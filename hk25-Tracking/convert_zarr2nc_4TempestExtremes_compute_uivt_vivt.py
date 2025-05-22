@@ -107,7 +107,18 @@ def main():
                 ds_month_year["sfcWind"].attrs.update({"long_name": "surface Wind Speed", "units": "m s-1"})
             if all(k in ds_month_year for k in ["hus", "ua", "va"]):
                 lev = ds["lev"]
-                ps = ds["ps"] if "ps" in ds_month_year else lev[~np.isnan(ds_month_year["hus"])].argmax("lev")
+                #
+                if "ps" not in ds_month_year.data_vars:
+                    mask_valid = ~np.isnan(ds_month_year["hus"])
+                    # Use argmax to find the *first valid level from top* (lev should be sorted from high to low)
+                    first_valid_idx = mask_valid.argmax(dim="lev").compute()
+
+                    # Convert the index to the actual pres value
+                    ps         = lev.isel(lev=first_valid_idx)
+                    #
+                else:
+                    ps         = ds["ps"]
+                #
                 ds_month_year["uivt"] = vertical_mass_integration(ds_month_year["hus"] * ds_month_year["ua"], ps, lev)
                 ds_month_year["vivt"] = vertical_mass_integration(ds_month_year["hus"] * ds_month_year["va"], ps, lev)
                 ds_month_year["uivt"].attrs.update({"long_name": "ZonalVapFlux", "units": "m^-1 s^-1 kg"})
