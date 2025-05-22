@@ -25,6 +25,7 @@ s_TimeRes = "PT6H"
 zoom = 8
 out_dir = f'/pscratch/sd/w/wcmca1/scream-cess-healpix/data4TE/{s_Model}_{s_TimeRes}/'
 
+# {Variable Names in the Raw Data : Output Variable Names}
 varout_dict = {
     'time': 'time', 'lat': 'lat', 'lon': 'lon', 'pressure': 'lev', 'ua': 'ua', 'va': 'va', 'hus': 'hus',
     'orog': 'ELEV', 'pr': 'pr', 'prs': 'prs', 'ps': 'ps', 'psl': 'psl', 'uas': 'uas', 'vas': 'vas',
@@ -33,6 +34,14 @@ varout_dict = {
 
 # =============== Utility Functions =======================
 def vertical_mass_integration(hus, ps, plev):
+    '''
+    The function computes the vertical mass integration (Eq.(1) in Chen et al. (2020 EF https://doi.org/ 10.1029/2019EF001435)) 
+    for the input variable, hus
+    Input para:
+        hus: dataset for vertical mass integration in which the name of vertical coordinate must be "lev"
+        ps: surface pressure datasest with same dimension sizes to hus except for the "lev" 
+        plev: vertical pressure coordinate with same dimension sizes to hus lev dimension
+    '''
     if not np.all(np.diff(plev.values) > 0):
         hus = hus.sel(lev=plev[::-1])
         plev = plev[::-1]
@@ -51,6 +60,9 @@ def vertical_mass_integration(hus, ps, plev):
     return integrand.sum(dim="lev")
 
 def clean_attrs_for_netcdf(ds):
+    '''
+    The function cleans the global attributes in dataset, ds, to avoid errors during outputing the data
+    '''
     for key in list(ds.attrs):
         val = ds.attrs[key]
         if isinstance(val, dict):
@@ -89,8 +101,7 @@ def main():
     for month, ds_month in ds.groupby('time.month'):
         for year, ds_month_year in ds_month.groupby('time.year'):
             year_val = ds_month_year.coords['time'].dt.year[0].values
-            if year_val == 2020 or (year_val == 2021 and month < 1):
-                continue
+            #
             if "sfcWind" not in ds_month_year and "uas" in ds_month_year and "vas" in ds_month_year:
                 ds_month_year["sfcWind"] = np.sqrt(ds_month_year["uas"]**2 + ds_month_year["vas"]**2)
                 ds_month_year["sfcWind"].attrs.update({"long_name": "surface Wind Speed", "units": "m s-1"})
@@ -101,6 +112,8 @@ def main():
                 ds_month_year["vivt"] = vertical_mass_integration(ds_month_year["hus"] * ds_month_year["va"], ps, lev)
                 ds_month_year["uivt"].attrs.update({"long_name": "ZonalVapFlux", "units": "m^-1 s^-1 kg"})
                 ds_month_year["vivt"].attrs.update({"long_name": "MeridionalVapFlux", "units": "m^-1 s^-1 kg"})
+            else:
+                print("Warning: Not Enough Variables (hus, ua, or va) to Compute the uivt or vivt")
 
             ds_month_year.attrs = ds.attrs
             out_file = os.path.join(out_dir, f"{s_Model}_ivt_hp{zoom}_{s_TimeRes}.{year_val}{str(month).zfill(2)}.nc")
