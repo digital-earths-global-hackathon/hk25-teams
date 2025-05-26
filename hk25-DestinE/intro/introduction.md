@@ -5,7 +5,7 @@
 - [Which simulations are available? -> Climate DT simulation overview](https://destine.ecmwf.int/climate-change-adaptation-digital-twin-climate-dt/)
 - [Which variables were saved? -> Data catalogue for ClimateDT](https://confluence.ecmwf.int/display/DDCZ/Climate+DT+Phase+1+data+catalogue#ClimateDTPhase1datacatalogue-Outputparameters)
 - [Are there example notebooks for my interactive analysis? -> Polytope examples](https://github.com/destination-earth-digital-twins/polytope-examples/tree/main/climate-dt)
-- [How do I adjust my data request? -> STAC catalogue](https://qubed.lumi.apps.dte.destination-earth.eu/)
+- How do I adjust my data request? -> [STAC catalogue](https://qubed.lumi.apps.dte.destination-earth.eu/) and [Polytope-MARS user guide](https://github.com/ecmwf/polytope-mars/blob/develop/docs/user_guide/)
 - [Is there documentation on Earthkit? -> Earthkit docs](https://earthkit.readthedocs.io/en/latest/)
 - [Can I see the status of the different data bridges somewhere? -> status.data.destination-earth.eu](https://status.data.destination-earth.eu/LUMI)
 
@@ -101,4 +101,4 @@ request = {
 }
 ```
 
-This polytope request can be modified to request data from any of the available simulations. The prototype [STAC catalogue](https://qubed.lumi.apps.dte.destination-earth.eu/) offers an interactive interface to create your custom data request.
+This polytope request can be modified to request data from any of the available simulations. The prototype [STAC catalogue](https://qubed.lumi.apps.dte.destination-earth.eu/) offers an interactive interface to create your custom data request. To extract for instance specific trajectories or timeseries one can also use add a `feature` to the request. Guidelines for this can be found in the [polytope-mars user guide](https://github.com/ecmwf/polytope-mars/blob/develop/docs/user_guide/).
