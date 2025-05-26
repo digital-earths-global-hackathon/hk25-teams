@@ -101,4 +101,4 @@ request = {
 }
 ```
 
-This polytope request can be modified to request data from any of the available simulations. The prototype [STAC catalogue](https://qubed.lumi.apps.dte.destination-earth.eu/) offers an interactive interface to create your custom data request. To extract for instance specific trajectories or timeseries one can also use add a `feature` to the request. Guidelines for this can be found in the [polytope-mars user guide](https://github.com/ecmwf/polytope-mars/blob/develop/docs/user_guide/).
+This polytope request can be modified to request data from any of the available simulations. The prototype [STAC catalogue](https://qubed.lumi.apps.dte.destination-earth.eu/) offers an interactive interface to create your custom data request. To extract for instance specific trajectories or timeseries one can also add a `feature` to the request. Guidelines for this can be found in the [polytope-mars user guide](https://github.com/ecmwf/polytope-mars/blob/develop/docs/user_guide/).
