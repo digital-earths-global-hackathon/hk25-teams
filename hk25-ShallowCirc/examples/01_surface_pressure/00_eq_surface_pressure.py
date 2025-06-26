@@ -262,7 +262,7 @@ cbar_ax = fig.add_axes([0.1, 0.05, 0.8, 0.02])  # [left, bottom, width, height]
 cbar = plt.colorbar(contour2, cax=cbar_ax, orientation="horizontal")
 cbar.set_label("Surface Pressure / hPa")
 
-filename = f"examples/01_eq_surface_pressure/figs/fig_01.png"
+filename = f"figs/fig_00.png"
 plt.savefig(filename, facecolor='white', bbox_inches='tight', dpi=200)
 
 plt.show()

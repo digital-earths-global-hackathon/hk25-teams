@@ -1,4 +1,5 @@
-# Preamble
+#%%
+# # Preamble
 import re
 import glob
 import os
@@ -12,12 +13,16 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.patches import Rectangle
 import cartopy.crs as ccrs
+
+#%%
 # Fetch Data
 cat = intake.open_catalog(
     "https://data.nextgems-h2020.eu/catalog.yaml"
 )
 cat_hera = intake.open_catalog("https://tcodata.mpimet.mpg.de/internal.yaml")
 print(f"Experiments in Catalog: {list(cat.keys())}")
+
+#%%
 # Data
 zoom_use = 8
 
@@ -43,6 +48,8 @@ crs_for_ERA5 = (
     cat["ICON"]["ngc4008"](time="P1D", zoom=7, chunks="auto")
     .to_dask()
 )
+
+#%%
 ## Get Lon-Lat Coordinates
 def attach_coords(ds, nside, nest_tf):
     lons, lats = hp.pix2ang(nside, ds.cell.values, nest=nest_tf, lonlat=True)
@@ -89,6 +96,8 @@ ngcMBE2922_3_MAR = (xr.open_mfdataset(files_MAR, combine="by_coords")
                     .sel(time=slice('1979-03-01','1979-03-31'))
                     .mean(dim="time")
                    )
+
+#%%
 # Process Data
 def east_pacific(ds):
     return (ds.lat > BOTTOM) & (ds.lat < TOP) & (ds.lon > ePcf_LEFT) & (ds.lon < ePcf_RIGHT)
@@ -111,6 +120,8 @@ ePcf_RIGHT = 260
 
 g_at_equator = 9.78
 R_d = 287.05
+
+#%%
 # ICON Control
 ngcMBE2922_3_MAR_wPcf = ngcMBE2922_3_MAR.where(west_pacific(ocean_native(grid_atm)), drop=True)
 ngcMBE2922_3_MAR_wPcf_rho = ngcMBE2922_3_MAR_wPcf.rho.mean(dim='cell').compute()
@@ -127,6 +138,8 @@ ngcMBE2922_MAR_ePcf = ngcMBE2922_MAR.where(east_pacific(ocean_native(grid_atm)),
 ngcMBE2922_MAR_ePcf_T = ngcMBE2922_MAR_ePcf.ta.mean(dim='cell').compute()
 AMIP_1979_MAR_wPcf_height_in_meter = ngc4008_wPcf.zg.mean(dim="cell").sel(level_full=ngcMBE2922_MAR_wPcf.height_2).compute()
 AMIP_1979_MAR_ePcf_height_in_meter = ngc4008_ePcf.zg.mean(dim="cell").sel(level_full=ngcMBE2922_MAR_ePcf.height_2).compute()
+
+#%%
 # ERA5
 T_v = era5_T_MAR.T * (1 + 0.61 * era5_q_MAR.Q)
 
@@ -146,6 +159,7 @@ era5_MAR_ePcf_T = era5_T_MAR.T.where(east_pacific(ocean(ngc4008)), drop=True).me
 era5_MAR_wPcf_T = era5_T_MAR.T.where(west_pacific(ocean(ngc4008)), drop=True).mean(dim='cell').compute()
 era5_MAR_wPcf_T_with_height = era5_MAR_wPcf_T.assign_coords(height=("plev", era5_MAR_wPcf_height_in_meter.data))
 
+#%%
 #west_pacific
 era5_MAR_wPcf_T_with_height = era5_MAR_wPcf_T.assign_coords(height=("plev", era5_MAR_wPcf_height_in_meter.data))
 era5_MAR_wPcf_T_with_height = era5_MAR_wPcf_T_with_height.swap_dims({"plev": "height"})
@@ -155,7 +169,8 @@ era5_MAR_wPcf_T_with_height_interp = (
     .rename({'height_2':'height'})
 )
 
-#east_pacific
+#%%
+# #east_pacific
 era5_MAR_ePcf_T_with_height = era5_MAR_ePcf_T.assign_coords(height=("plev", era5_MAR_ePcf_height_in_meter.data))
 era5_MAR_ePcf_T_with_height = era5_MAR_ePcf_T_with_height.swap_dims({"plev": "height"})
 era5_MAR_ePcf_T_with_height_interp = (
@@ -163,6 +178,8 @@ era5_MAR_ePcf_T_with_height_interp = (
     .drop_vars({'plev','height'})
     .rename({'height_2':'height'})
 )
+
+#%%
 # Plotting
 SIZE = 30
 plt.rcParams["axes.labelsize"] = SIZE
@@ -279,7 +296,9 @@ ax.spines[["right", "top"]].set_visible(False)
 ax.text(-0.3, 1.15, '(c)', fontsize=BUCHSTABI, transform=ax.transAxes, color='black')
 ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2), fancybox=True, shadow=False, ncol=1)
 
-filename = f"figs/fig_06.png"
+filename = f"figs/fig_01.png"
 plt.savefig(filename, facecolor='white', bbox_inches='tight', dpi=200)
 
 plt.show()
+
+# %%
